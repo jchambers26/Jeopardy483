@@ -1,2 +1,4 @@
 *.class
 .vscode/*
+watson-jeopardy/src/main/resources/index/*
+watson-jeopardy/target/*
