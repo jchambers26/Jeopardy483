@@ -10,8 +10,16 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
 public class Index {
@@ -23,12 +31,20 @@ public class Index {
     private static IndexWriter writer;
     
     public static void buildIndex() throws IOException {
+
         indexDir = FSDirectory.open(Paths.get("watson-jeopardy/src/main/resources/index"));
 
         // set up the analyzer and config
         analyzer = new StandardAnalyzer();
         config = new IndexWriterConfig(analyzer);
         writer = new IndexWriter(indexDir, config);
+
+        // If the index already exists (if the directory is populated, don't rebuild it)
+        if (indexDir.listAll().length > 0) {
+            System.out.println("Index already exists");
+            index = true;
+            return;
+        }
 
         File directory = new File("watson-jeopardy/src/main/resources/wikiData");
 
@@ -95,6 +111,41 @@ public class Index {
             return line.substring(0, 2).equals("[[") && line.substring(line.length() - 2).equals("]]");
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Get the best document for the given query
+     * @param queryString The query to search for
+     * @return The name of the best document
+     * @throws IOException If the index cannot be read
+     */
+    public static String getBestDoc(String queryString) throws IOException {
+
+        if (!index) {
+            buildIndex();
+        }
+
+        Query query;
+        try {
+            // Replace all newlines, ands, ors, and nots with spaces
+            queryString = queryString.replace("\n", " ").toLowerCase();
+            
+            query = new QueryParser("document", analyzer).parse(QueryParser.escape(queryString));
+            IndexReader reader = DirectoryReader.open(indexDir);
+            IndexSearcher searcher = new IndexSearcher(reader);
+            TopDocs results = searcher.search(query, 1);
+            ScoreDoc[] hits = results.scoreDocs;
+    
+            if (hits.length > 0) {
+                Document doc = searcher.doc(hits[0].doc);
+                return doc.get("title").trim();
+            } else {
+                return null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
