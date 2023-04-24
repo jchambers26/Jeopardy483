@@ -20,6 +20,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.FSDirectory;
 
 public class Index {
@@ -40,7 +41,7 @@ public class Index {
         writer = new IndexWriter(indexDir, config);
 
         // If the index already exists (if the directory is populated, don't rebuild it)
-        if (indexDir.listAll().length > 0) {
+        if (indexDir.listAll().length > 1) {
             System.out.println("Index already exists");
             index = true;
             return;
@@ -117,10 +118,11 @@ public class Index {
     /**
      * Get the best document for the given query
      * @param queryString The query to search for
+     * @param scoringMethod The scoring method to use
      * @return The name of the best document
      * @throws IOException If the index cannot be read
      */
-    public static String getBestDoc(String queryString) throws IOException {
+    public static String getBestDoc(String queryString, String scoringMethod) throws IOException {
 
         if (!index) {
             buildIndex();
@@ -134,6 +136,9 @@ public class Index {
             query = new QueryParser("document", analyzer).parse(QueryParser.escape(queryString));
             IndexReader reader = DirectoryReader.open(indexDir);
             IndexSearcher searcher = new IndexSearcher(reader);
+            if (scoringMethod.equals("Cosine")) {
+                searcher.setSimilarity(new ClassicSimilarity());
+            }
             TopDocs results = searcher.search(query, 1);
             ScoreDoc[] hits = results.scoreDocs;
     

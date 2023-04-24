@@ -20,6 +20,8 @@ public class Jeopardy
     private int correct = 0;
     private int total = 0;
 
+    private String scoringMethod = "BM25";
+
     public Jeopardy() {
         try {
             Index.buildIndex();
@@ -32,6 +34,19 @@ public class Jeopardy
             System.out.println("********Welcome to the Watson Jeopardy Engine!********");
             Jeopardy jeopardy = new Jeopardy();
             System.out.println("********Indexing Complete!********");
+
+            System.out.println("Would you like to use Cosine Similarity TFIDF scoring instead of probabilistic BM25? (y/n)");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine().trim();
+            while (!input.equals("y") && !input.equals("n")) {
+                System.out.println("Please enter y or n");
+                input = scanner.nextLine();
+            }
+            if (input.equals("y")) {
+                jeopardy.scoringMethod = "Cosine";
+            }
+            scanner.close();
+            System.out.println("********Scoring Method: " + jeopardy.scoringMethod + "********");
             jeopardy.scanQuestions();
 
         }
@@ -63,7 +78,7 @@ public class Jeopardy
                 // The correct answer could be multiple answers, separated by a |
                 String[] correctAnswers = correctAnswer.split("\\|");
 
-                String answer = Index.getBestDoc(question + " " + category);
+                String answer = Index.getBestDoc(question + " " + category, this.scoringMethod);
 
                 // System.out.println("Category: " + category);
                 // System.out.println("Question: " + question);
@@ -72,11 +87,20 @@ public class Jeopardy
                 // System.out.println();
 
                 // If the answer is one of the correct answers, increment the correct counter
+                boolean good = false;
                 for (String cor : correctAnswers) {
-                    if (cor.equals(answer)) {
+                    if (cor.toLowerCase().equals(answer.toLowerCase())) {
                         correct++;
+                        good = true;
                         break;
                     }
+                }
+                if (!good) {
+                    System.out.println("Category: " + category);
+                    System.out.println("Question: " + question);
+                    System.out.println("Correct Answer: " + correctAnswer);
+                    System.out.println("Answer: " + answer);
+                    System.out.println();
                 }
                 total++;
             }
