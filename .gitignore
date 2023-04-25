@@ -2,3 +2,19 @@
 .vscode/*
 watson-jeopardy/src/main/resources/index/*
 watson-jeopardy/target/*
+watson-jeopardy/pom.xml.tag
+watson-jeopardy/pom.xml.releaseBackup
+watson-jeopardy/pom.xml.versionsBackup
+watson-jeopardy/pom.xml.next
+watson-jeopardy/release.properties
+watson-jeopardy/dependency-reduced-pom.xml
+watson-jeopardy/buildNumber.properties
+watson-jeopardy/.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+watson-jeopardy/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+watson-jeopardy/.project
+# JDT-specific (Eclipse Java Development Tools)
+watson-jeopardy/.classpath
