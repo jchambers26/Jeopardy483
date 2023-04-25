@@ -1,6 +1,7 @@
 package arizona;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class Index {
             System.out.println(file.getName());
             if (file.isFile()) {
 
-                Scanner scanner = new Scanner(file);
+                Scanner scanner = new Scanner(new FileInputStream(file), "UTF-8");
 
                 // The first line of every file is a title
                 String title = scanner.nextLine();
