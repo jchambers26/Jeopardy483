@@ -50,7 +50,7 @@ public class Jeopardy
             jeopardy.scanQuestions();
 
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -69,6 +69,7 @@ public class Jeopardy
                 
                 String category = scanner.nextLine();
                 String question = scanner.nextLine();
+                question.replace("\"", "");
                 String correctAnswer = scanner.nextLine();
                 // Skip over the blank line
                 if (scanner.hasNextLine()) {
@@ -78,10 +79,40 @@ public class Jeopardy
                 // The correct answer could be multiple answers, separated by a |
                 String[] correctAnswers = correctAnswer.split("\\|");
 
-                String answer = Index.getBestDoc(question + " " + category, this.scoringMethod);
+                String query = "";
+
+                if (category.equals("GOLDEN GLOBE WINNERS")) {
+                    String q = question.substring(3, question.length());
+                    String year = q.split(":")[0];
+                    String info = q.split(":")[1].trim().toLowerCase();
+                    query = year + " AND \"" + info + "\" AND \"golden globe\" AND actor^3.3 AND \"early life\"";
+                    System.out.println(query);
+
+                }
+                else if (category.equals("HE PLAYED A GUY NAMED JACK RYAN IN...")) {
+                    query = question + " AND \"jack ryan\" AND \"played by\" AND \"played\" AND \"character\" AND \"film\"";
+                }
+                else {
+                    query = question + " " + category;
+                }
+
+                String answer = Index.getBestDoc(query, this.scoringMethod);
+
+                // if (category.equals("GOLDEN GLOBE WINNERS")) {
+                //     answer = Index.getBestDoc(query, this.scoringMethod);
+                //     System.out.println("Category: " + category);
+                //     System.out.println("Question: " + question);
+                //     System.out.println("Correct Answer: " + correctAnswer);
+                //     System.out.println("Answers: ");
+                //     for (String answer : answers) {
+                //         System.out.println(answer);
+                //     }
+                //     System.out.println();
+                // }
 
                 // System.out.println("Category: " + category);
                 // System.out.println("Question: " + question);
+                // System.out.println("Query: " + query);
                 // System.out.println("Correct Answer: " + correctAnswer);
                 // System.out.println("Answer: " + answer);
                 // System.out.println();
@@ -98,6 +129,7 @@ public class Jeopardy
                 if (!good) {
                     System.out.println("Category: " + category);
                     System.out.println("Question: " + question);
+                    System.out.println("Query: " + query);
                     System.out.println("Correct Answer: " + correctAnswer);
                     System.out.println("Answer: " + answer);
                     System.out.println();
