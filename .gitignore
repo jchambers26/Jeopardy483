@@ -1,5 +1,6 @@
 *.class
 .vscode/*
+*.DS_Store
 watson-jeopardy/src/main/resources/index/*
 watson-jeopardy/target/*
 watson-jeopardy/pom.xml.tag
