@@ -1,6 +1,7 @@
 package arizona;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class Index {
             System.out.println(file.getName());
             if (file.isFile()) {
 
-                Scanner scanner = new Scanner(file);
+                Scanner scanner = new Scanner(new FileInputStream(file), "UTF-8");
 
                 // The first line of every file is a title
                 String title = scanner.nextLine();
@@ -130,7 +131,7 @@ public class Index {
 
         Query query;
         try {
-            // Replace all newlines, ands, ors, and nots with spaces
+            // Replace all newlines with spaces and make the query lowercase
             queryString = queryString.replace("\n", " ").toLowerCase();
             
             query = new QueryParser("document", analyzer).parse(QueryParser.escape(queryString));
@@ -139,9 +140,21 @@ public class Index {
             if (scoringMethod.equals("Cosine")) {
                 searcher.setSimilarity(new ClassicSimilarity());
             }
-            TopDocs results = searcher.search(query, 1);
+            TopDocs results = searcher.search(query, 10);
             ScoreDoc[] hits = results.scoreDocs;
     
+
+            // // Return the top 10 documents
+            // if (hits.length > 0) {
+            //     String[] docs = new String[hits.length];
+            //     for (int i = 0; i < hits.length; i++) {
+            //         Document doc = searcher.doc(hits[i].doc);
+            //         docs[i] = doc.get("title").trim();
+            //     }
+            //     return docs;
+            // } else {
+            //     return null;
+            // }
             if (hits.length > 0) {
                 Document doc = searcher.doc(hits[0].doc);
                 return doc.get("title").trim();
