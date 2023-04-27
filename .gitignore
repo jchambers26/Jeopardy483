@@ -15,6 +15,25 @@ watson-jeopardy/.mvn/wrapper/maven-wrapper.jar
 
 # Eclipse m2e generated files
 # Eclipse Core
-watson-jeopardy/.project
+watson-jeopardy/watson-jeopardy/.project
 # JDT-specific (Eclipse Java Development Tools)
-watson-jeopardy/.classpath
+watson-jeopardy/watson-jeopardy/.classpath
+watson-jeopardy/watson-jeopardy/src/main/resources/index/*
+watson-jeopardy/watson-jeopardy/target/*
+watson-jeopardy/watson-jeopardy/pom.xml.tag
+watson-jeopardy/watson-jeopardy/pom.xml.releaseBackup
+watson-jeopardy/watson-jeopardy/pom.xml.versionsBackup
+watson-jeopardy/watson-jeopardy/pom.xml.next
+watson-jeopardy/watson-jeopardy/release.properties
+watson-jeopardy/watson-jeopardy/dependency-reduced-pom.xml
+watson-jeopardy/watson-jeopardy/buildNumber.properties
+watson-jeopardy/watson-jeopardy/.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+watson-jeopardy/watson-jeopardy/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+watson-jeopardy/watson-jeopardy/.project
+# JDT-specific (Eclipse Java Development Tools)
+watson-jeopardy/watson-jeopardy/.classpath
+watson-jeopardy/watson-jeopardy/src/main/resources/.DS_Store
