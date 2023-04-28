@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -31,6 +32,7 @@ public class Index {
     private static StandardAnalyzer analyzer;
     private static IndexWriterConfig config;
     private static IndexWriter writer;
+    public static ArrayList<String> titles = new ArrayList<String>();
     
     public static void buildIndex() throws IOException {
 
@@ -40,9 +42,9 @@ public class Index {
         analyzer = new StandardAnalyzer();
         config = new IndexWriterConfig(analyzer);
         writer = new IndexWriter(indexDir, config);
-
+        index = false;
         // If the index already exists (if the directory is populated, don't rebuild it)
-        if (indexDir.listAll().length > 1) {
+        if (index) {
             System.out.println("Index already exists");
             index = true;
             return;
@@ -72,8 +74,9 @@ public class Index {
                         doc.add(new StringField("title", title, Field.Store.YES));
                         doc.add(new TextField("document", document, Field.Store.YES));
                         writer.addDocument(doc);
-
+                        
                         title = processTitle(line);
+                        titles.add(title);
                         document = "";
                     }
                     // Otherwise, add the line to the document
@@ -140,9 +143,17 @@ public class Index {
             if (scoringMethod.equals("Cosine")) {
                 searcher.setSimilarity(new ClassicSimilarity());
             }
-            TopDocs results = searcher.search(query, 1);
+            TopDocs results = searcher.search(query, 3);
             ScoreDoc[] hits = results.scoreDocs;
-    
+            // System.out.println("======= PRINTING THE TOP 3 DOCS =======");
+            // for (ScoreDoc hit:hits){
+            //     Document doc1 = searcher.doc(hit.doc);
+            //     System.out.println("++++++++++++ Title "+ doc1.get("title").trim());
+            //     System.out.println("++++++++++++ Score "+ hit.score);
+                
+            // }
+            // System.out.println("================================\n");
+
             if (hits.length > 0) {
                 Document doc = searcher.doc(hits[0].doc);
                 return doc.get("title").trim();

@@ -9,12 +9,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.FileWriter;
 /**
  * Hello world!
  *
  */
 public class Jeopardy 
 {
+    
+   
 
     private boolean indexExists = false;
     private int correct = 0;
@@ -34,7 +37,7 @@ public class Jeopardy
             System.out.println("********Welcome to the Watson Jeopardy Engine!********");
             Jeopardy jeopardy = new Jeopardy();
             System.out.println("********Indexing Complete!********");
-
+           
             System.out.println("Would you like to use Cosine Similarity TFIDF scoring instead of probabilistic BM25? (y/n)");
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine().trim();
@@ -48,7 +51,21 @@ public class Jeopardy
             scanner.close();
             System.out.println("********Scoring Method: " + jeopardy.scoringMethod + "********");
             jeopardy.scanQuestions();
-
+             try {
+                    File myObj = new File("./titles.txt");
+                    FileWriter myWriter = new FileWriter("titles.txt");
+                    myObj.createNewFile();
+                    if (Index.titles.size() == 0)
+                        System.out.println("Shit");
+                    for (String title: Index.titles){
+                        myWriter.write(title);
+                        myWriter.write(System.getProperty( "line.separator" ));
+                    }
+                    myWriter.close();
+                } catch (IOException ex){
+                    ex.printStackTrace();
+                }
+                
         }
         catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -106,7 +123,7 @@ public class Jeopardy
             }
             scanner.close();
             System.out.println("Correct: " + correct + " out of " + total);
-
+            
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
