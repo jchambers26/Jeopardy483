@@ -101,6 +101,9 @@ public class Jeopardy {
                 else if (category.strip().equals("HE PLAYED A GUY NAMED JACK RYAN IN...")) {
                     query = question + " AND \"jack ryan\" AND (\"played by\" OR \"played\") AND \"film\"";
                 }
+                else if (category.equals("THE QUOTABLE KEATS")){
+                    query = question + " -Keats";
+                }
                 else {
                     query = question + " " + category;
                 }
