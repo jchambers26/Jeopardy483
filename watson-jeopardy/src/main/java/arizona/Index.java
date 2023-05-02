@@ -81,12 +81,12 @@ public class Index {
         config = new IndexWriterConfig(analyzer);
         writer = new IndexWriter(indexDir, config);
 
-        // If the index already exists (if the directory is populated, don't rebuild it)
-        // if (indexDir.listAll().length > 1) {
-        //     System.out.println("Index already exists");
-        //     index = true;
-        //     return;
-        // }
+        //If the index already exists (if the directory is populated, don't rebuild it)
+        if (indexDir.listAll().length > 1) {
+            System.out.println("Index already exists");
+            index = true;
+            return;
+        }
 
         File directory = new File("watson-jeopardy/src/main/resources/wikiData");
 
@@ -109,6 +109,14 @@ public class Index {
 
                     // if a new title has been found, save the current document
                     if (isTitle(line)) {
+                        if (lem) {
+                            String lemmatized = "";
+                            edu.stanford.nlp.simple.Document doc = new edu.stanford.nlp.simple.Document(document);
+                            for (Sentence sentence : doc.sentences()) {
+                                lemmatized += StringUtils.join(sentence.lemmas(), " ");
+                            }
+                            document = lemmatized;
+                        }
                         Document doc = new Document();
                         doc.add(new StringField("title", title, Field.Store.YES));
                         doc.add(new TextField("document", document, Field.Store.YES));
@@ -119,13 +127,16 @@ public class Index {
                     }
                     // Otherwise, add the line to the document
                     else {
-                        if (lem && line.length() > 1){ // if whitespaceAnalyzer was chosen we need to lemmatize the line first
-                            //System.out.println(line);
-                            Sentence sentence = new Sentence(line);
-                            //System.out.println("or here?");
+                        // line = line.trim().strip().replace("\n", ""); // overkill it
+                        // if (lem && line.length() > 0 && !(line.equals("&nbsp;"))){ // if whitespaceAnalyzer was chosen we need to lemmatize the line first
+                        //     System.out.println(line);
+                        //     Sentence sentence = new Sentence(line);
+                        //     //System.out.println("or here?");
     
-                            line = StringUtils.join(sentence.lemmas(), " ");
-                        }
+                        //     line = StringUtils.join(sentence.lemmas(), " ");
+                            
+
+                        // }
                         document += line;
                     }
                 }
@@ -188,6 +199,7 @@ public class Index {
             queryString = queryString.replace("\n", " ").toLowerCase();
             if (lem) {
                 queryString = StringUtils.join(new Sentence(queryString).lemmas(), " ");
+                
             }
 
             query = new QueryParser("document", analyzer).parse(QueryParser.escape(queryString));

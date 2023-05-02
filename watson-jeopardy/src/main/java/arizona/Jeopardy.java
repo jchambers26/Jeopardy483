@@ -88,24 +88,25 @@ public class Jeopardy {
                 // The correct answer could be multiple answers, separated by a |
                 String[] correctAnswers = correctAnswer.split("\\|");
 
-                String query = "";
+                // String query = "";
+                // query = question + " " + category;
 
-                if (category.equals("GOLDEN GLOBE WINNERS")) {
-                    String q = question.substring(3, question.length());
-                    String year = q.split(":")[0];
-                    String info = q.split(":")[1].trim().toLowerCase();
-                    query = year + " AND \"" + info + "\" AND \"golden globe\" AND actor^3.3 AND \"early life\"";
-                    System.out.println(query);
+                // if (category.strip().equals("GOLDEN GLOBE WINNERS")) {
+                //     String q = question.substring(3, question.length());
+                //     String year = q.split(":")[0];
+                //     String info = q.split(":")[1].trim().toLowerCase();
+                //     query = year + " AND \"" + info + "\" AND \"golden globe\" AND actor^3.3 AND \"early life\"";
+                //     System.out.println(query);
 
-                }
-                else if (category.equals("HE PLAYED A GUY NAMED JACK RYAN IN...")) {
-                    query = question + " AND \"jack ryan\" AND \"played by\" AND \"played\" AND \"character\" AND \"film\"";
-                }
-                else {
-                    query = question + " " + category;
-                }
+                // }
+                // else if (category.strip().equals("HE PLAYED A GUY NAMED JACK RYAN IN...")) {
+                //     query = question + " AND \"jack ryan\" AND \"played by\" AND \"played\" AND \"character\" AND \"film\"";
+                // }
+                // else {
+                //     query = question + " " + category;
+                // }
 
-                String answer = Index.getBestDoc(query, this.scoringMethod);
+                String answer = Index.getBestDoc(question, this.scoringMethod);
 
                 // If the answer is one of the correct answers, increment the correct counter
                 boolean good = false;

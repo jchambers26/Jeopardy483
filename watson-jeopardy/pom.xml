@@ -10,7 +10,7 @@
 
   <name>watson-jeopardy</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>http://maven.apache.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,6 +66,12 @@
       <classifier>models</classifier>
     </dependency>
 
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+    <version>1.7.25</version>
+</dependency>
     
   </dependencies>
 
