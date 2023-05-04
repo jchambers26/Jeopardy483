@@ -20,14 +20,16 @@ def run_jeopardy(analyzer, cs_option):
 
 if __name__ == "__main__":
     print("started")
-    analyzers = {"StandardAnalyzer": "-s",
-                 "EnglishAnalyzer": "-e",
-                 "SimpleAnalyzer": "-si",
-                 #  "StopAnalyzer": "-st",
-                 "KeywordAnalyzer": "-k",
-                 #  "SnowballAnalyzer": "-sn",
-                 "WhitespaceAnalyzer": "-w"}
-    cosine_similarity = ['-y', '-n']
+    analyzers = {  # "StandardAnalyzer": "-s",
+        "CustomAnalyzer": "-c"
+        #  "EnglishAnalyzer": "-e",
+        #  "SimpleAnalyzer": "-si",
+        #  "StopAnalyzer": "-st",
+        # "KeywordAnalyzer": "-k",
+        #  "SnowballAnalyzer": "-sn",
+        #  "WhitespaceAnalyzer": "-w"
+    }
+    cosine_similarity = ['-n']
     cmd("mvn package")
 
     for analyzer in analyzers:

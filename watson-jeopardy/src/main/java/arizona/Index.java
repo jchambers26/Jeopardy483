@@ -10,6 +10,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -63,7 +64,7 @@ public class Index {
             System.exit(0);
         }
         // set up the analyzer and config
-        analyzer = new StandardAnalyzer();
+        // analyzer = new StandardAnalyzer();
         config = new IndexWriterConfig(analyzer);
         writer = new IndexWriter(indexDir, config);
 
